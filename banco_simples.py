@@ -14,19 +14,6 @@ saldo: float = 0
 LIMITE_VALOR_SAQUES: float = 500
 LIMITE_DIARIO_SAQUES = 0
 
-def saque(quantia):
-    global VALORES
-    global saldo
-    saldo -= quantia
-    VALORES += f'Saque    {hora.month}/{hora.year} -R${quantia:.2f}\n'
-    return saldo
-
-def deposito(quantia):
-    global VALORES
-    global saldo
-    saldo += quantia
-    VALORES += f'Deposito {hora.month}/{hora.year}  R${quantia:.2f}\n'
-    return saldo
 
 while True:
     print(f'''
@@ -56,12 +43,15 @@ Hora{hora.ctime()[10:16]}
         elif quantia <= 0:
             print(f'Valor incorreto informado.')
         else:
-            saque(quantia)
+            saldo -= quantia
+            VALORES += f'Saque    {hora.month}/{hora.year} -R${quantia:.2f}\n'
             LIMITE_DIARIO_SAQUES += 1
             print(f'''
 Saque realizado com sucesso!
             
 Seu saldo atual é R${saldo:.2f}.
+
+
 ''')
 
     elif int(opcao) == 2:
@@ -69,16 +59,19 @@ Seu saldo atual é R${saldo:.2f}.
         if quantia <= 0:
             print(f'Valor incorreto informado.')
         else:
-            deposito(quantia)
+            saldo += quantia
+            VALORES += f'Deposito {hora.month}/{hora.year}  R${quantia:.2f}\n'
             print(f'''
 Deposito realizado com sucesso!
 
 Seu saldo atual é R${saldo:.2f}
+
 ''')
     elif int(opcao) == 3:
             print('EXTRATO'.center(29, '-'))
             print(f'Não há registros de movimentação na sua conta' if not VALORES else VALORES)
             print(f'''Seu saldo atual é {saldo:.2f}
+                  
 ------------------------------''')
     elif int(opcao) == 0:
         print(f'''
